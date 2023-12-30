@@ -1,3 +1,4 @@
+using System.Device.Gpio;
 using System.Text.Json.Serialization;
 using Iot.Device.CpuTemperature;
 
@@ -37,6 +38,22 @@ healthApi.MapGet("/temperature", () =>
     }
 
     return Results.Ok(new SystemHealth(cpuTemperature.Temperature.DegreesCelsius));
+});
+
+var doorApi = app.MapGroup("/door");
+doorApi.MapGet("/open", () =>
+{
+    const int RELAY = 23;
+    using var controller = new GpioController();
+    controller.OpenPin(RELAY, PinMode.Output);
+    for (int i = 0; i < 2; i++)
+    {
+        controller.Write(RELAY, PinValue.High);
+        Thread.Sleep(250);
+        controller.Write(RELAY, PinValue.Low);
+        Thread.Sleep(250);
+    }
+    return Results.Ok();
 });
 
 app.Run();

@@ -1,0 +1,11 @@
+[Unit]
+Description=Run API
+After=multi-user.target
+
+[Service]
+Type=simple
+ExecStart=/path/to/folder/rpi
+WorkingDirectory=/path/to/folder
+
+[Install]
+WantedBy=multi-user.target
