@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Iot.Device.CpuTemperature;
 
 var builder = WebApplication.CreateSlimBuilder(args);
 
@@ -24,10 +25,26 @@ todosApi.MapGet("/{id}", (int id) =>
         ? Results.Ok(todo)
         : Results.NotFound());
 
+app.MapGet("/ping", () => "pong");
+
+var healthApi = app.MapGroup("/health");
+healthApi.MapGet("/temperature", () =>
+{
+    using CpuTemperature cpuTemperature = new();
+    if (!cpuTemperature.IsAvailable)
+    {
+        return Results.Problem("CPU temperature is not available");
+    }
+
+    return Results.Ok(new SystemHealth(cpuTemperature.Temperature.DegreesCelsius));
+});
+
 app.Run();
 
 public record Todo(int Id, string? Title, DateOnly? DueBy = null, bool IsComplete = false);
+public record SystemHealth(double Temperature);
 
+[JsonSerializable(typeof(SystemHealth))]
 [JsonSerializable(typeof(Todo[]))]
 internal partial class AppJsonSerializerContext : JsonSerializerContext
 {
