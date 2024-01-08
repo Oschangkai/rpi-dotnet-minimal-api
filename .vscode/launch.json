@@ -1,0 +1,40 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      // 使用 IntelliSense 找出 C# 偵錯具有哪些屬性
+      // 針對現有屬性的描述使用暫留
+      // 如需詳細資訊，請造訪 https://github.com/dotnet/vscode-csharp/blob/main/debugger-launchjson.md。
+      "name": ".NET Core Launch (web)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "osx": {
+        "program": "${workspaceFolder}/bin/Debug/net8.0/osx-arm64/rpi",
+        "args": [
+          "--os",
+          "osx"
+        ],
+      },
+      // 如果您已變更目標 Framework，請務必更新程式路徑。
+      "program": "${workspaceFolder}/bin/Debug/net8.0/linux-arm64/rpi",
+      "args": [],
+      "cwd": "${workspaceFolder}",
+      "stopAtEntry": false,
+      // 啟用在 ASP.NET Core 開始時啟動網頁瀏覽器。如需詳細資訊: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
+      "serverReadyAction": {
+        "action": "openExternally",
+        "pattern": "\\bNow listening on:\\s+(https?://\\S+)",
+        "uriFormat": "%s/ping"
+      },
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    {
+      "name": ".NET Core Attach",
+      "type": "coreclr",
+      "request": "attach"
+    }
+  ]
+}
